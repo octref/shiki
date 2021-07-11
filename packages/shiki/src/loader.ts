@@ -1,6 +1,6 @@
 import JSON5 from 'json5'
 import { loadWASM, OnigScanner, OnigString } from 'onigasm'
-import { join, dirname } from './utils'
+import { join, dirpathparts } from './utils'
 import type { IOnigLib, IRawGrammar, IRawTheme } from 'vscode-textmate'
 import type { IShikiTheme } from './types'
 
@@ -111,7 +111,7 @@ export async function fetchTheme(themePath: string): Promise<IShikiTheme> {
   const shikiTheme = toShikiTheme(theme)
 
   if (shikiTheme.include) {
-    const includedTheme = await fetchTheme(join(dirname(themePath), shikiTheme.include))
+    const includedTheme = await fetchTheme(join(...dirpathparts(themePath), shikiTheme.include))
 
     if (includedTheme.settings) {
       shikiTheme.settings = includedTheme.settings.concat(shikiTheme.settings)
